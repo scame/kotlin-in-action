@@ -12,7 +12,7 @@ class AddrBookController {
     companion object {
         val numberOfEach = 10
         val generatorInterval = 30
-        val sleepTime = 100L
+        val sleepTime = 10L
     }
 
     val addrBook: MutableMap<String, String> = HashMap()
@@ -23,7 +23,6 @@ class AddrBookController {
     val readersPool = Executors.newCachedThreadPool()
     val writersPool = Executors.newCachedThreadPool()
 
-
     fun runController() {
         runWriters()
         runReaders()
@@ -33,13 +32,11 @@ class AddrBookController {
         execInWriteContext(numberOfEach) {
             val writer = Modifier(atomicCounter.getAndIncrement(), addrBook)
             writer.addRecord(Random().generateRndName(generatorInterval), Random().generateRndNumber(generatorInterval))
-            Thread.sleep(sleepTime)
         }
 
         execInWriteContext(numberOfEach) {
             val writer = Modifier(atomicCounter.getAndIncrement(), addrBook)
             writer.removeRecord(Random().generateRndName(generatorInterval))
-            Thread.sleep(sleepTime)
         }
     }
 
